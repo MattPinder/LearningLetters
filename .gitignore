@@ -1,0 +1,20 @@
+.vsconfig
+Assembly-*
+Learning*
+Library/
+Logs/
+obj/
+Packages/
+ProjectSettings/
+Temp/
+UserSettings/
+Assets/Materials/
+Assets/Particles/
+Assets/Prefabs/
+Assets/Scenes/
+Assets/Settings/
+Assets/TextMesh Pro/
+Assets/TutorialInfo/
+Assets/InputSystem_Actions.inputactions
+Assets/Readme.asset
+Assets/*.meta
