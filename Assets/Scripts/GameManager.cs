@@ -5,68 +5,68 @@ using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject letterPrefab;
 
-    public bool isGameActive;
+    public GameObject[] letterPrefabs;                         // Array of letter prefabs (defined in Unity Editor)
+    public TextMeshProUGUI scoreText;                          // Text displaying the remaining orbs during gameplay
+    public GameObject titleScreen;                             // GameObject containing title screen text
+    private PlayerTrail player;                                // GameObject representing the player
 
-    public GameObject orbPrefab;
+    public bool isGameActive = false;                          // Determine whether the game is active or not
+    public int orbsRemaining;                                  // How many orbs left to collect on the current letter
+    public List<Vector3> letterShape = new List<Vector3>();    // List containing the Vector3 of all of a letter's orbs
+    // Find a way to convert letterShape to a property!
 
-    public TextMeshProUGUI scoreText;
-    public int orbsRemaining;
-
-    private PlayerTrail player;
-
-    //    public Vector3[] letterShape { get; private set; }
-    public List<Vector3> letterShape = new List<Vector3>();
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Start on menu screen, and find the Player object
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<PlayerTrail>();
+    }
 
+    // Check each frame whether any orbs remain; if not, spawn a new letter
+    void Update()
+    {
+        if (isGameActive && orbsRemaining == 0)
+        {
+            SpawnRandomLetter();
+        }
+    }
+
+    public void StartGame()
+    {
         isGameActive = true;
+        scoreText.gameObject.SetActive(true);
+        titleScreen.gameObject.SetActive(false);
 
-        // WHERE IS THE BEST PLACE TO SET ALL LETTER SHAPES?
+        SpawnRandomLetter();
+    }
 
-        //// Letter A
-        //letterShape = new[] { new Vector3(0.0f, 3.7f, 0.0f), new Vector3(-0.9f, 1.7f, 0.0f), new Vector3(-2.5f, -0.7f, 0.0f),
-        //                      new Vector3(-4.0f, -3.0f, 0.0f), new Vector3(0.9f, 1.7f, 0.0f), new Vector3(2.5f, -0.7f, 0.0f),
-        //                      new Vector3(4.0f, -3.0f, 0.0f), new Vector3(-0.8f, -0.7f, 0.0f), new Vector3(0.8f, -0.7f, 0.0f) };
+    void SpawnRandomLetter()
+    {
+        // Purge previous letterShape
+        letterShape = new List<Vector3>();
 
-        //// Letter C
-        //letterShape = new[] { new Vector3(3.0f, 2.5f, 0.0f), new Vector3(0.0f, 3.5f, 0.0f), new Vector3(-2.5f, 1.5f, 0.0f),
-        //                      new Vector3(-2.5f, -1.5f, 0.0f), new Vector3(0.0f, -3.5f, 0.0f), new Vector3(3.0f, -2.5f, 0f) };
+        // Get a random index from the letterPrefabs list
+        int letterIndex = Random.Range(0, letterPrefabs.Length);
 
-        //        SpawnLetter(letterShape);
-        Instantiate(letterPrefab, letterPrefab.transform.position, letterPrefab.transform.rotation);
+        // Instantiate the random letter
+        Instantiate(letterPrefabs[letterIndex],
+                    letterPrefabs[letterIndex].transform.position,
+                    letterPrefabs[letterIndex].transform.rotation);
+
+        // Get an array containing all of the newly-spawned orbs
         GameObject[] ArrayOfOrbs = GameObject.FindGameObjectsWithTag("Orb");
-        Debug.Log("Length of array: " + ArrayOfOrbs.Length);
-        
+
+        // Get the coordinates of all of the orbs, and increment orbsRemaining
         foreach (GameObject orb in ArrayOfOrbs)
         {
             letterShape.Add(orb.transform.position);
+            orbsRemaining++;
         }
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        // IF ALL ORBS ARE GONE, SPAWN ANOTHER RANDOM LETTER FROM A LIST
-        if (orbsRemaining == 0)
-        {
-            player.destroyNext = 0;
-//            SpawnLetter(letterShape);
-        }
-    }
+        // Update score text
+        scoreText.text = "Orbs remaining: " + orbsRemaining;
 
-    // Spawn letter based off of a Vector3 array
-//    void SpawnLetter(Vector3[] posList)
-//    {
-//        for (int i = 0; i < posList.Length; i++)
-//        {
-//            Instantiate(orbPrefab, posList[i], orbPrefab.transform.rotation);
-//        }
-//        orbsRemaining = posList.Length;
-//        scoreText.text = "Orbs remaining: " + posList.Length;
-//    }
+        // Reset the player's destroyNext variable
+        player.destroyNext = 0;
+    }
 }

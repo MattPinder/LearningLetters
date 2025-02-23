@@ -16,12 +16,6 @@ public class CollectibleController : MonoBehaviour
         orbColour = gameObject.GetComponent<MeshRenderer>().material;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void DestroyCollectible()
     {
         if (gameManager.isGameActive)

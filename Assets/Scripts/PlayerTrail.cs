@@ -58,7 +58,6 @@ public class PlayerTrail : MonoBehaviour
     // Move 'player' based on mouse/finger/stylus input
     void UpdateMousePosition()
     {
-//        playerPos = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
         playerPos = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, (cam.transform.position.z * -1)));
         transform.position = playerPos;
     }
@@ -78,6 +77,13 @@ public class PlayerTrail : MonoBehaviour
             {
                 other.gameObject.GetComponent<CollectibleController>().DestroyCollectible();    // Destroy collectible
                 gameManager.orbsRemaining--;    // Decrement remaining
+
+                // If no more orbs exist, delete the parent object
+                if (gameManager.orbsRemaining == 0)
+                {
+                    Destroy(other.transform.parent.gameObject);
+                }
+
                 scoreText.text = "Orbs remaining: " + gameManager.orbsRemaining;    // Update score text
                 destroyNext++;  // Increment index of next orb
             }
