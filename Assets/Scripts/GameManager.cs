@@ -27,46 +27,42 @@ public class GameManager : MonoBehaviour
     {
         if (isGameActive && orbsRemaining == 0)
         {
-            SpawnRandomLetter();
+            orbsRemaining = 1;                      // Add 1 to orbsRemaining to break the if-statement and prevent over-spawning
+            Invoke("SpawnRandomLetter", 1.0f);      // Spawn a new letter after a one second delay
         }
     }
 
     public void StartGame()
     {
-        isGameActive = true;
-        scoreText.gameObject.SetActive(true);
-        titleScreen.gameObject.SetActive(false);
+        isGameActive = true;                        // Activate the game
+        scoreText.gameObject.SetActive(true);       // Show score text
+        titleScreen.gameObject.SetActive(false);    // Hide title screen text
 
-        SpawnRandomLetter();
+        SpawnRandomLetter();                        // Spawn first letter
     }
 
     void SpawnRandomLetter()
     {
-        // Purge previous letterShape
-        letterShape = new List<Vector3>();
-
-        // Get a random index from the letterPrefabs list
-        int letterIndex = Random.Range(0, letterPrefabs.Length);
+        letterShape = new List<Vector3>();                          // Purge previous letterShape
+        orbsRemaining = 0;                                          // Reset orbsRemaining (set to 1 in Update() to stop extra spawns)
+        int letterIndex = Random.Range(0, letterPrefabs.Length);    // Get a random index from the letterPrefabs list
 
         // Instantiate the random letter
         Instantiate(letterPrefabs[letterIndex],
                     letterPrefabs[letterIndex].transform.position,
                     letterPrefabs[letterIndex].transform.rotation);
 
-        // Get an array containing all of the newly-spawned orbs
-        GameObject[] ArrayOfOrbs = GameObject.FindGameObjectsWithTag("Orb");
+        GameObject[] ArrayOfOrbs = GameObject.FindGameObjectsWithTag("Orb");        // Get an array containing all of the newly-spawned orbs
 
         // Get the coordinates of all of the orbs, and increment orbsRemaining
-        foreach (GameObject orb in ArrayOfOrbs)
+        // FUNCTION TO ADD: SPAWN THE ORBS DEACTIVATED, THEN ACTIVATE EACH IN TURN AFTER A SHORT (0.5s?) DELAY
+        foreach (GameObject orb in ArrayOfOrbs)        
         {
             letterShape.Add(orb.transform.position);
             orbsRemaining++;
         }
 
-        // Update score text
-        scoreText.text = "Orbs remaining: " + orbsRemaining;
-
-        // Reset the player's destroyNext variable
-        player.destroyNext = 0;
+        scoreText.text = "Orbs remaining: " + orbsRemaining;        // Update score text
+        player.destroyNext = 0;                                     // Reset the player's destroyNext variable
     }
 }
