@@ -12,11 +12,12 @@ public class PlayerTrail : MonoBehaviour
     private Vector3 playerPos;          // Player's mouse/finger/stylus position
     private TrailRenderer trail;        // This object's Trail Renderer component
     private BoxCollider col;            // This object's Box Collider component
+    public ParticleSystem particles;    // This object's child Particle system
     private bool drawing = false;       // Whether the player is drawing or not
 
     public int destroyNext;            // Track index number of the next collectible required
 
-    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI orbsRemainingText;
 
     void Awake()
     {
@@ -25,6 +26,7 @@ public class PlayerTrail : MonoBehaviour
         col = GetComponent<BoxCollider>();
         trail.enabled = false;
         col.enabled = false;
+        particles.gameObject.SetActive(false);
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
 
         destroyNext = 0;
@@ -46,6 +48,10 @@ public class PlayerTrail : MonoBehaviour
             {
                 drawing = false;
                 UpdateComponents();
+                if (particles.isPlaying)
+                {
+                    particles.Stop();
+                }
             }
             // ... move the player position if drawing mode is active
             if (drawing)
@@ -67,6 +73,12 @@ public class PlayerTrail : MonoBehaviour
     {
         trail.enabled = drawing;
         col.enabled = drawing;
+        particles.gameObject.SetActive(drawing);
+    }
+
+    public void ClearTrail()
+    {
+        trail.Clear();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -84,7 +96,7 @@ public class PlayerTrail : MonoBehaviour
                     Destroy(other.transform.parent.gameObject);
                 }
 
-                scoreText.text = "Orbs remaining: " + gameManager.orbsRemaining;    // Update score text
+                orbsRemainingText.text = "Orbs remaining: " + gameManager.orbsRemaining;    // Update score text
                 destroyNext++;  // Increment index of next orb
             }
             else
