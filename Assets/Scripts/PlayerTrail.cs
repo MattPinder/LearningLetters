@@ -2,15 +2,14 @@ using TMPro;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-// Adding this component will also add Trail Renderer and Box Collider components, if missing
-[RequireComponent(typeof(TrailRenderer), typeof(BoxCollider))]
+// Adding this component will also add a Box Collider component, if missing
+[RequireComponent(typeof(BoxCollider))]
 
 public class PlayerTrail : MonoBehaviour
 {
     private GameManager gameManager;    // Scene's Game Manager
     private Camera cam;                 // Scene's main camera
     private Vector3 playerPos;          // Player's mouse/finger/stylus position
-    private TrailRenderer trail;        // This object's Trail Renderer component
     private BoxCollider col;            // This object's Box Collider component
     public ParticleSystem particles;    // This object's child Particle system
     private bool drawing = false;       // Whether the player is drawing or not
@@ -19,12 +18,16 @@ public class PlayerTrail : MonoBehaviour
 
     public TextMeshProUGUI orbsRemainingText;
 
+    // Components for the 'painting' system
+    public GameObject trailPrefab = null;
+    private GameObject currentTrail = null;
+    private float width = 5f;
+    private Color color = Color.magenta;
+
     void Awake()
     {
         cam = Camera.main;
-        trail = GetComponent<TrailRenderer>();
         col = GetComponent<BoxCollider>();
-        trail.enabled = false;
         col.enabled = false;
         particles.gameObject.SetActive(false);
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
@@ -41,12 +44,14 @@ public class PlayerTrail : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 drawing = true;
+                StartTrail();
                 UpdateComponents();
             }
             // ... deactivate 'drawing mode' if the mouse button etc. is released
             else if (Input.GetMouseButtonUp(0))
             {
                 drawing = false;
+                EndTrail();
                 UpdateComponents();
                 if (particles.isPlaying)
                 {
@@ -68,17 +73,49 @@ public class PlayerTrail : MonoBehaviour
         transform.position = playerPos;
     }
 
-    // Enable/disable Trail Renderer and Box collider
+    // Enable/disable Box Collider and Particle System
     void UpdateComponents()
     {
-        trail.enabled = drawing;
         col.enabled = drawing;
         particles.gameObject.SetActive(drawing);
     }
 
+    // Copied from Unity VR Tutorial
+    public void StartTrail()
+    {
+        if (!currentTrail)
+        {
+            currentTrail = Instantiate(trailPrefab, transform.position, transform.rotation, transform);
+            ApplySettings(currentTrail);
+        }
+    }
+
+    // Copied from Unity VR Tutorial (change size/colour as needed)
+    private void ApplySettings(GameObject trailObject)
+    {
+        TrailRenderer trailRenderer = trailObject.GetComponent<TrailRenderer>();
+        trailRenderer.widthMultiplier = width;
+        trailRenderer.startColor = color;
+        trailRenderer.endColor = color;
+    }
+
+    // Copied from Unity VR Tutorial
+    public void EndTrail()
+    {
+        if (currentTrail)
+        {
+            currentTrail.transform.parent = null;
+            currentTrail = null;
+        }
+    }
+
     public void ClearTrail()
     {
-        trail.Clear();
+        GameObject[] oldTrails = GameObject.FindGameObjectsWithTag("Trail");
+        foreach (GameObject eachTrail in oldTrails)
+        {
+            Destroy(eachTrail);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

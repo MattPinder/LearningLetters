@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
-
     public GameObject[] letterPrefabs;                          // Array of letter prefabs (defined in Unity Editor)
     public TextMeshProUGUI orbsRemainingText;                   // Text displaying the remaining orbs during gameplay
     public TextMeshProUGUI lettersCompleteText;                 // Text displaying the number of completed letters during gameplay
@@ -20,7 +19,7 @@ public class GameManager : MonoBehaviour
     // Find a way to convert letterShape to a property!
 
     public GameObject selectedLetter;                           // Letter defined by the button press
-    public string altGameMode;
+    public string altGameMode = null;                           // Any alternate game mode selected (Upper/Lower/All)
 
     private float spawnDelay = 0.5f;                            // Seconds to wait before spawning a new letter
     private int lettersToWin;                                   // Number of letters to complete to win
@@ -67,6 +66,8 @@ public class GameManager : MonoBehaviour
     {
         isGameActive = false;                               // Deactivate the game state
         selectedLetter = null;                              // Unload the selected letter
+        player.ClearTrail();                                // Remove the last set of painted trails
+        altGameMode = null;                                 // Reset altGameMode
         orbsRemainingText.gameObject.SetActive(false);      // Hide orbs remaining text
         lettersCompleteText.gameObject.SetActive(false);    // Hide letters complete text
         winText.gameObject.SetActive(false);                // Hide win screen text
@@ -102,7 +103,8 @@ public class GameManager : MonoBehaviour
         player.ClearTrail();                // Clear the player's trail from the previous letter
         letterShape = new List<Vector3>();  // Purge previous letterShape
         orbsRemaining = 0;                  // Reset orbsRemaining (set to 1 in Update() to stop extra spawns)
-        if (selectedLetter == null && altGameMode == null)
+
+        if (selectedLetter == null && altGameMode == null)  // Random letters
         {
             // Get a random index from the letterPrefabs list, and instantiate the random letter
             int letterIndex = Random.Range(0, letterPrefabs.Length);
@@ -122,16 +124,16 @@ public class GameManager : MonoBehaviour
                         letterPrefabs[lettersComplete + 26].transform.position,
                         letterPrefabs[lettersComplete + 26].transform.rotation);
         }
-        else // Random letters
+        else // Single letters
         {
             // Instantiate the selected letter
             Instantiate(selectedLetter, selectedLetter.transform.position, selectedLetter.transform.rotation);
         }
-        GameObject[] ArrayOfOrbs = GameObject.FindGameObjectsWithTag("Orb");        // Get an array containing all of the newly-spawned orbs
+        GameObject[] arrayOfOrbs = GameObject.FindGameObjectsWithTag("Orb");        // Get an array containing all of the newly-spawned orbs
 
         // Get the coordinates of all of the orbs, and increment orbsRemaining
         // FUNCTION TO ADD: SPAWN THE ORBS DEACTIVATED, THEN ACTIVATE EACH IN TURN AFTER A SHORT (0.5s?) DELAY
-        foreach (GameObject orb in ArrayOfOrbs)
+        foreach (GameObject orb in arrayOfOrbs)
         {
             letterShape.Add(orb.transform.position);
             orbsRemaining++;
