@@ -10,19 +10,18 @@ public class GameManager : MonoBehaviour
     public GameObject[] letterPrefabs;                          // Array of letter prefabs (defined in Unity Editor)
     public GameObject selectedLetter;                           // Letter defined by the button press
     public int orbsRemaining;                                   // How many orbs left to collect on the current letter
-    public int lettersComplete { get; private set; }            // How many letters have been completed in the current session
+    public int treasureCollected;                              // How many orbs the player has collected this game
+    private int lettersComplete;                                // How many letters have been completed in the current session
     // Find a way to convert letterShape to a property!
     public List<Vector3> letterShape = new List<Vector3>();     // List containing the Vector3 of all of a letter's orbs
     private float spawnDelay = 0.5f;                            // Seconds to wait before spawning a new letter
-    private int lettersToWin;                                   // Number of letters to complete to win    
+    public int lettersToWin { get; private set; }               // Number of letters to complete to win    
 
     // Other
     public MenuUIController menuUIController;                   // Canvas's menu UI controller script
     private PlayerTrail player;                                 // GameObject representing the player
     public bool isGameActive = false;                           // Determine whether the game is active or not
     public string altGameMode = null;                           // Any alternate game mode selected (Upper/Lower/All)
-
-
 
     // Start on menu screen, and find the Player object
     void Start()
@@ -53,8 +52,9 @@ public class GameManager : MonoBehaviour
     {
         isGameActive = true;                                                    // Activate the game
         lettersComplete = 0;                                                    // Set completed letters to zero
-        menuUIController.ToGame();                                              // Set UI to game screen
+        treasureCollected = 0;                                                  // Set collected orbs to zero
         WinCondition();                                                         // Set the win condition
+        menuUIController.ToGame();                                              // Set UI to game screen
         SpawnLetter();                                                          // Spawn letter to start the game
     }
 
@@ -71,7 +71,13 @@ public class GameManager : MonoBehaviour
     void IncreaseScore(int AddToScore)
     {
         lettersComplete += AddToScore;
-        menuUIController.lettersCompleteText.text = "Letters complete: " + lettersComplete;
+        menuUIController.lettersCompleteText.text = "Letters remaining: " + (lettersToWin - lettersComplete);
+    }
+
+    public void IncreaseTreasure(int AddToScore)
+    {
+        treasureCollected += AddToScore;
+        menuUIController.orbsCollectedText.text = "Treasure collected: " + treasureCollected;
     }
 
     // Set number of letters needed to win
@@ -96,6 +102,7 @@ public class GameManager : MonoBehaviour
         player.ClearTrail();                // Clear the player's trail from the previous letter
         letterShape = new List<Vector3>();  // Purge previous letterShape
         orbsRemaining = 0;                  // Reset orbsRemaining (set to 1 in Update() to stop extra spawns)
+        player.destroyNext = 0;             // Reset the player's destroyNext variable
 
         if (selectedLetter == null && altGameMode == null)  // Random letters
         {
@@ -131,8 +138,5 @@ public class GameManager : MonoBehaviour
             letterShape.Add(orb.transform.position);
             orbsRemaining++;
         }
-
-        menuUIController.orbsRemainingText.text = "Orbs remaining: " + orbsRemaining;        // Update score text
-        player.destroyNext = 0;                                                             // Reset the player's destroyNext variable
     }
 }

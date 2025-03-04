@@ -16,8 +16,6 @@ public class PlayerTrail : MonoBehaviour
 
     public int destroyNext;            // Track index number of the next collectible required
 
-    public TextMeshProUGUI orbsRemainingText;
-
     // Components for the 'painting' system
     public GameObject trailPrefab = null;
     private GameObject currentTrail = null;
@@ -133,8 +131,8 @@ public class PlayerTrail : MonoBehaviour
                     Destroy(other.transform.parent.gameObject);
                 }
 
-                orbsRemainingText.text = "Orbs remaining: " + gameManager.orbsRemaining;    // Update score text
-                destroyNext++;  // Increment index of next orb
+                gameManager.IncreaseTreasure(1);    // Add one to the player's Treasure score
+                destroyNext++;                      // Increment index of next orb
             }
             else
             {

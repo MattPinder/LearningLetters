@@ -9,7 +9,7 @@ public class MenuUIController : MonoBehaviour
     public GameObject infoScreen;          // Game Object representing the instruction screen
 
     // Variables for in-game HUD
-    public TextMeshProUGUI orbsRemainingText;       // Text displaying the remaining orbs during gameplay
+    public TextMeshProUGUI orbsCollectedText;   // Text displaying the orbs collected during gameplay
     public TextMeshProUGUI lettersCompleteText;     // Text displaying the number of completed letters during gameplay
 
     // Variables for upper/lower case slider
@@ -37,17 +37,18 @@ public class MenuUIController : MonoBehaviour
     {
         titleScreen.gameObject.SetActive(true);             // Show title screen
         infoScreen.gameObject.SetActive(false);             // Hide instruction screen
-        orbsRemainingText.gameObject.SetActive(false);      // Hide orbs remaining text
+        orbsCollectedText.gameObject.SetActive(false);      // Hide orbs remaining text
         lettersCompleteText.gameObject.SetActive(false);    // Hide letters complete text
         winText.gameObject.SetActive(false);                // Hide win screen text
     }
 
     public void ToGame()
     {
-        orbsRemainingText.gameObject.SetActive(true);                                   // Show orbs remaining text
-        lettersCompleteText.text = "Letters complete: " + gameManager.lettersComplete;  // Set initial letters complete text
-        lettersCompleteText.gameObject.SetActive(true);                                 // Show letters complete text
-        titleScreen.gameObject.SetActive(false);                                        // Hide title screen text
+        orbsCollectedText.text = "Treasure collected: " + gameManager.treasureCollected; // Set orbs collected to zero
+        orbsCollectedText.gameObject.SetActive(true);                                    // Show orbs remaining text
+        lettersCompleteText.text = "Letters remaining: " + gameManager.lettersToWin;     // Set initial letters complete text
+        lettersCompleteText.gameObject.SetActive(true);                                  // Show letters complete text
+        titleScreen.gameObject.SetActive(false);                                         // Hide title screen text
     }
 
     // Switch between upper- and lower-case letters in the menu based on a toggle
