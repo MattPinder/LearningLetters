@@ -37,7 +37,7 @@ public class MenuUIController : MonoBehaviour
     {
         titleScreen.gameObject.SetActive(true);             // Show title screen
         infoScreen.gameObject.SetActive(false);             // Hide instruction screen
-        orbsCollectedText.gameObject.SetActive(false);      // Hide orbs remaining text
+        orbsCollectedText.gameObject.SetActive(false);      // Hide treasure collected text
         lettersCompleteText.gameObject.SetActive(false);    // Hide letters complete text
         winText.gameObject.SetActive(false);                // Hide win screen text
     }
@@ -45,7 +45,7 @@ public class MenuUIController : MonoBehaviour
     public void ToGame()
     {
         orbsCollectedText.text = "Treasure collected: " + gameManager.treasureCollected; // Set orbs collected to zero
-        orbsCollectedText.gameObject.SetActive(true);                                    // Show orbs remaining text
+        orbsCollectedText.gameObject.SetActive(true);                                    // Show treasure collected text
         lettersCompleteText.text = "Letters remaining: " + gameManager.lettersToWin;     // Set initial letters complete text
         lettersCompleteText.gameObject.SetActive(true);                                  // Show letters complete text
         titleScreen.gameObject.SetActive(false);                                         // Hide title screen text

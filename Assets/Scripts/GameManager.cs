@@ -17,6 +17,12 @@ public class GameManager : MonoBehaviour
     private float spawnDelay = 0.5f;                            // Seconds to wait before spawning a new letter
     public int lettersToWin { get; private set; }               // Number of letters to complete to win    
 
+    // Variables for sound effects
+    private AudioSource gameAudio;          // Game audio source
+    public AudioClip orbCollectedSound;     // Sound played when orb collected
+    public AudioClip letterCompletedSound;  // Sound played when letter completed
+    public AudioClip winSound;              // Plays when the game is won
+
     // Other
     public MenuUIController menuUIController;                   // Canvas's menu UI controller script
     private PlayerTrail player;                                 // GameObject representing the player
@@ -27,6 +33,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<PlayerTrail>();
+        gameAudio = GetComponent<AudioSource>();
         menuUIController = GameObject.Find("Canvas").GetComponent<MenuUIController>();
     }
 
@@ -40,9 +47,11 @@ public class GameManager : MonoBehaviour
 
             if (lettersComplete == lettersToWin)
             {
+                gameAudio.PlayOneShot(winSound);
                 menuUIController.VictoryScreen();
                 Invoke("WinGame", 1.0f);                      // End game if the player has completed enough letters
             } else {
+                gameAudio.PlayOneShot(letterCompletedSound);
                 Invoke("SpawnLetter", spawnDelay);            // Spawn a new letter after a one second delay
             }
         }
@@ -68,16 +77,19 @@ public class GameManager : MonoBehaviour
         menuUIController.ToMenu();                          // Set UI to menu screen
     }
 
+    // Increment orbs collected count
+    public void IncreaseTreasure(int AddToScore)
+    {
+        gameAudio.PlayOneShot(orbCollectedSound);
+        treasureCollected += AddToScore;
+        menuUIController.orbsCollectedText.text = "Treasure collected: " + treasureCollected;
+    }
+
+    // Increment letters completed count
     void IncreaseScore(int AddToScore)
     {
         lettersComplete += AddToScore;
         menuUIController.lettersCompleteText.text = "Letters remaining: " + (lettersToWin - lettersComplete);
-    }
-
-    public void IncreaseTreasure(int AddToScore)
-    {
-        treasureCollected += AddToScore;
-        menuUIController.orbsCollectedText.text = "Treasure collected: " + treasureCollected;
     }
 
     // Set number of letters needed to win
