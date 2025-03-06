@@ -1,6 +1,8 @@
+.utmp/
 .vsconfig
 Assembly-*
 Learning*
+LetterReference.jpeg
 Library/
 Logs/
 obj/
@@ -22,5 +24,7 @@ Assets/*.meta
 Assets/Hovl*
 Assets/BTM*
 Assets/Casual*
+Assets/Nature*
+Assets/Texture_Me*
 Assets/Tree*
 Assets/Scripts/*.meta

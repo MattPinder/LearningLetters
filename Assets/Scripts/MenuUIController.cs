@@ -5,19 +5,23 @@ using UnityEngine;
 public class MenuUIController : MonoBehaviour
 {
     // Variables for Menu and Instructions screens
+    [Header("Menu and Instruction Screens")]
     public GameObject titleScreen;         // Game Object representing the title screen
     public GameObject infoScreen;          // Game Object representing the instruction screen
 
     // Variables for in-game HUD
+    [Header("In-game HUD")]
     public TextMeshProUGUI orbsCollectedText;   // Text displaying the orbs collected during gameplay
     public TextMeshProUGUI lettersCompleteText;     // Text displaying the number of completed letters during gameplay
 
     // Variables for upper/lower case slider
+    [Header("Upper/Lower Case Slider")]
     private bool letterStyle = false;       // Start with lower case letters
     public GameObject upperCase;            // Upper case buttons
     public GameObject lowerCase;            // Lower case buttons
 
     // Other
+    [Header("Other")]
     public GameManager gameManager;         // Game Manager
     public TextMeshProUGUI winText;         // Text displaying when the player wins a round
 

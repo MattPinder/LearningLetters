@@ -7,27 +7,32 @@ using UnityEngine.UIElements;
 public class GameManager : MonoBehaviour
 {
     // Variables for letter spawning
+    [Header("Letter Spawning")]
     public GameObject[] letterPrefabs;                          // Array of letter prefabs (defined in Unity Editor)
     public GameObject selectedLetter;                           // Letter defined by the button press
     public int orbsRemaining;                                   // How many orbs left to collect on the current letter
     public int treasureCollected;                              // How many orbs the player has collected this game
     private int lettersComplete;                                // How many letters have been completed in the current session
     // Find a way to convert letterShape to a property!
-    public List<Vector3> letterShape = new List<Vector3>();     // List containing the Vector3 of all of a letter's orbs
-    private float spawnDelay = 0.5f;                            // Seconds to wait before spawning a new letter
+    private float spawnDelay = 1.0f;                            // Seconds to wait before spawning a new letter
     public int lettersToWin { get; private set; }               // Number of letters to complete to win    
+    public List<Vector3> letterShape = new List<Vector3>();     // List containing the Vector3 of all of a letter's orbs
 
     // Variables for sound effects
-    private AudioSource gameAudio;          // Game audio source
+    [Header("Sound Effects")]
+    public AudioClip buttonSound;           // Sound played when a menu button is pressed
     public AudioClip orbCollectedSound;     // Sound played when orb collected
     public AudioClip letterCompletedSound;  // Sound played when letter completed
     public AudioClip winSound;              // Plays when the game is won
+    private AudioSource gameAudio;          // Game audio source
 
     // Other
-    public MenuUIController menuUIController;                   // Canvas's menu UI controller script
-    private PlayerTrail player;                                 // GameObject representing the player
-    public bool isGameActive = false;                           // Determine whether the game is active or not
-    public string altGameMode = null;                           // Any alternate game mode selected (Upper/Lower/All)
+    [Header("Other")]
+    public MenuUIController menuUIController;       // Canvas's menu UI controller script
+    private PlayerTrail player;                     // GameObject representing the player
+    public bool isGameActive = false;               // Determine whether the game is active or not
+    public string altGameMode = null;               // Any alternate game mode selected (Upper/Lower/All)
+    private float winScreenTime = 3.0f;             // Time to remain on the win screen after winning the game
 
     // Start on menu screen, and find the Player object
     void Start()
@@ -49,12 +54,17 @@ public class GameManager : MonoBehaviour
             {
                 gameAudio.PlayOneShot(winSound);
                 menuUIController.VictoryScreen();
-                Invoke("WinGame", 1.0f);                      // End game if the player has completed enough letters
+                Invoke("WinGame", winScreenTime);             // End game if the player has completed enough letters
             } else {
                 gameAudio.PlayOneShot(letterCompletedSound);
                 Invoke("SpawnLetter", spawnDelay);            // Spawn a new letter after a one second delay
             }
         }
+    }
+
+    public void PlayButtonSound()
+    {
+        gameAudio.PlayOneShot(buttonSound);
     }
 
     public void StartGame()
