@@ -7,7 +7,7 @@ public class SetAltGameMode : MonoBehaviour
     private Button button;              // The attached button
     private GameManager gameManager;    // The scene's Game manager
 
-    public enum GameMode { Lower, Upper, All };
+    public enum GameMode { Random, Lower, Upper, All };
     public GameMode gameMode;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

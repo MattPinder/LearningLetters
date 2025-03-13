@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     // Find a way to convert letterShape to a property!
     private float spawnDelay = 1.0f;                            // Seconds to wait before spawning a new letter
     public int lettersToWin { get; private set; }               // Number of letters to complete to win    
-    public List<Vector3> letterShape = new List<Vector3>();     // List containing the Vector3 of all of a letter's orbs
+    public Vector3[] letterShape;                               // List containing the Vector3 of all of a letter's orbs
 
     // Variables for sound effects
     [Header("Sound Effects")]
@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     public MenuUIController menuUIController;       // Canvas's menu UI controller script
     private PlayerTrail player;                     // GameObject representing the player
     public bool isGameActive = false;               // Determine whether the game is active or not
-    public string altGameMode = null;               // Any alternate game mode selected (Upper/Lower/All)
+    public string altGameMode = null;               // Any alternate game mode selected (Random/Upper/Lower/All)
     private float winScreenTime = 3.0f;             // Time to remain on the win screen after winning the game
 
     // Start on menu screen, and find the Player object
@@ -69,22 +69,18 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        isGameActive = true;                                                    // Activate the game
-        lettersComplete = 0;                                                    // Set completed letters to zero
-        treasureCollected = 0;                                                  // Set collected orbs to zero
-        WinCondition();                                                         // Set the win condition
-        menuUIController.ToGame();                                              // Set UI to game screen
-        SpawnLetter();                                                          // Spawn letter to start the game
+        isGameActive = true;            // Activate the game
+        lettersComplete = 0;            // Set completed letters to zero
+        treasureCollected = 0;          // Set collected orbs to zero
+        WinCondition();                 // Set the win condition
+        menuUIController.ToGame();      // Set UI to game screen
+        SpawnLetter();                  // Spawn letter to start the game
     }
 
     // Once the game is won, return to main menu
     void WinGame()
     {
-        isGameActive = false;                               // Deactivate the game state
-        selectedLetter = null;                              // Unload the selected letter
-        player.ClearTrail();                                // Remove the last set of painted trails
-        altGameMode = null;                                 // Reset altGameMode
-        menuUIController.ToMenu();                          // Set UI to menu screen
+        menuUIController.ToMenu();      // Set UI to menu screen
     }
 
     // Increment orbs collected count
@@ -122,11 +118,10 @@ public class GameManager : MonoBehaviour
     void SpawnLetter()
     {
         player.ClearTrail();                // Clear the player's trail from the previous letter
-        letterShape = new List<Vector3>();  // Purge previous letterShape
         orbsRemaining = 0;                  // Reset orbsRemaining (set to 1 in Update() to stop extra spawns)
         player.destroyNext = 0;             // Reset the player's destroyNext variable
 
-        if (selectedLetter == null && altGameMode == null)  // Random letters
+        if (altGameMode == "Random")  // Random letters
         {
             // Get a random index from the letterPrefabs list, and instantiate the random letter
             int letterIndex = Random.Range(0, letterPrefabs.Length);
@@ -151,14 +146,9 @@ public class GameManager : MonoBehaviour
             // Instantiate the selected letter
             Instantiate(selectedLetter, selectedLetter.transform.position, selectedLetter.transform.rotation);
         }
-        GameObject[] arrayOfOrbs = GameObject.FindGameObjectsWithTag("Orb");        // Get an array containing all of the newly-spawned orbs
 
-        // Get the coordinates of all of the orbs, and increment orbsRemaining
         // FUNCTION TO ADD: SPAWN THE ORBS DEACTIVATED, THEN ACTIVATE EACH IN TURN AFTER A SHORT (0.5s?) DELAY
-        foreach (GameObject orb in arrayOfOrbs)
-        {
-            letterShape.Add(orb.transform.position);
-            orbsRemaining++;
-        }
+        letterShape = FindAnyObjectByType<LetterController>().orbLocations; // Assign new letterShape based on the newly spawned letter
+        orbsRemaining = letterShape.Length;                                 // Set number of orbs
     }
 }

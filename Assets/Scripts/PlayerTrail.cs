@@ -10,7 +10,7 @@ public class PlayerTrail : MonoBehaviour
     private GameManager gameManager;    // Scene's Game Manager
     private Camera cam;                 // Scene's main camera
     private Vector3 playerPos;          // Player's mouse/finger/stylus position
-    private BoxCollider col;            // This object's Box Collider component
+    public BoxCollider col;            // This object's Box Collider component
     public ParticleSystem particles;    // This object's child Particle system
     private bool drawing = false;       // Whether the player is drawing or not
 
@@ -55,6 +55,8 @@ public class PlayerTrail : MonoBehaviour
                 {
                     particles.Stop();
                 }
+
+                
             }
             // ... move the player position if drawing mode is active
             if (drawing)
@@ -141,8 +143,6 @@ public class PlayerTrail : MonoBehaviour
         }
     }
 
-    // THIS SHOULD ALSO TRIGGER IF THE BUTTON IS RELEASED WHILE TOUCHING A WRONG ORB,
-    // OTHERWISE IT COULD STAY WRONG-COLOURED FOREVER
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.GetComponent<CollectibleController>())

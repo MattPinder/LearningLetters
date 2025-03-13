@@ -1,6 +1,10 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using static UnityEngine.ParticleSystem;
 
 public class MenuUIController : MonoBehaviour
 {
@@ -11,8 +15,9 @@ public class MenuUIController : MonoBehaviour
 
     // Variables for in-game HUD
     [Header("In-game HUD")]
-    public TextMeshProUGUI orbsCollectedText;   // Text displaying the orbs collected during gameplay
-    public TextMeshProUGUI lettersCompleteText;     // Text displaying the number of completed letters during gameplay
+    public TextMeshProUGUI orbsCollectedText;    // Text displaying the orbs collected during gameplay
+    public TextMeshProUGUI lettersCompleteText;  // Text displaying the number of completed letters during gameplay
+    public Button quitCurrentGameButton;         // Button that quits the current game
 
     // Variables for upper/lower case slider
     [Header("Upper/Lower Case Slider")]
@@ -22,12 +27,14 @@ public class MenuUIController : MonoBehaviour
 
     // Other
     [Header("Other")]
-    public GameManager gameManager;         // Game Manager
+    private GameManager gameManager;        // Game Manager
+    private PlayerTrail player;             // GameObject representing the player
     public TextMeshProUGUI winText;         // Text displaying when the player wins a round
 
     void Start()
     {
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        player = GameObject.Find("Player").GetComponent<PlayerTrail>();
     }
 
     // Toggle between Menu, Instructions, and Game UI
@@ -39,20 +46,39 @@ public class MenuUIController : MonoBehaviour
 
     public void ToMenu()
     {
-        titleScreen.gameObject.SetActive(true);             // Show title screen
-        infoScreen.gameObject.SetActive(false);             // Hide instruction screen
-        orbsCollectedText.gameObject.SetActive(false);      // Hide treasure collected text
-        lettersCompleteText.gameObject.SetActive(false);    // Hide letters complete text
-        winText.gameObject.SetActive(false);                // Hide win screen text
+        // Unload any remaining letters
+        GameObject[] leftoverLetters = GameObject.FindGameObjectsWithTag("LetterPrefab");
+        foreach (GameObject leftover in leftoverLetters)
+        {
+            Destroy(leftover);
+        }
+
+        player.ClearTrail();                                // Remove the last set of painted trails
+        player.col.enabled = false;                         // Disable player box collider (just in case)
+        player.particles.gameObject.SetActive(false);       // Disable player particle effects
+        gameManager.isGameActive = false;                   // Deactivate the game state
+        gameManager.selectedLetter = null;                  // Unload the selected letter
+        gameManager.altGameMode = null;                     // Reset altGameMode
+        
+        // Show menu, and hide non-menu UI elements
+        titleScreen.gameObject.SetActive(true);
+        infoScreen.gameObject.SetActive(false);
+        orbsCollectedText.gameObject.SetActive(false);
+        lettersCompleteText.gameObject.SetActive(false);
+        quitCurrentGameButton.gameObject.SetActive(false);
+        winText.gameObject.SetActive(false);
     }
 
     public void ToGame()
     {
-        orbsCollectedText.text = "Treasure collected: " + gameManager.treasureCollected; // Set orbs collected to zero
-        orbsCollectedText.gameObject.SetActive(true);                                    // Show treasure collected text
-        lettersCompleteText.text = "Letters remaining: " + gameManager.lettersToWin;     // Set initial letters complete text
-        lettersCompleteText.gameObject.SetActive(true);                                  // Show letters complete text
-        titleScreen.gameObject.SetActive(false);                                         // Hide title screen text
+        // Set relevant text for the new game
+        orbsCollectedText.text = "Treasure collected: " + gameManager.treasureCollected;
+        lettersCompleteText.text = "Letters remaining: " + gameManager.lettersToWin;
+        // Set up the relevant HUD elements
+        orbsCollectedText.gameObject.SetActive(true);
+        lettersCompleteText.gameObject.SetActive(true);
+        quitCurrentGameButton.gameObject.SetActive(true);
+        titleScreen.gameObject.SetActive(false);
     }
 
     // Switch between upper- and lower-case letters in the menu based on a toggle
