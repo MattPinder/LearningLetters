@@ -1,7 +1,11 @@
 .utmp/
 .vsconfig
+.plastic/
+.vs/
 Assembly-*
-Learning*
+ignore.conf*
+Learning*sln
+LearningLetters_MaliFont_20250306.unitypackage
 LetterReference.jpeg
 Library/
 Logs/
@@ -28,3 +32,5 @@ Assets/Nature*
 Assets/Texture_Me*
 Assets/Tree*
 Assets/Scripts/*.meta
+Builds/Learning Letters_BurstDebugInformation_DoNotShip
+Builds/LearningLetters_Build*_2025030*apk
