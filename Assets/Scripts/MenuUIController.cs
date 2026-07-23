@@ -12,6 +12,7 @@ public class MenuUIController : MonoBehaviour
     [Header("Menu and Instruction Screens")]
     public GameObject titleScreen;         // Game Object representing the title screen
     public GameObject infoScreen;          // Game Object representing the instruction screen
+    public GameObject optionsScreen;       // Game Object representing the options screen
 
     // Variables for in-game HUD
     [Header("In-game HUD")]
@@ -44,6 +45,30 @@ public class MenuUIController : MonoBehaviour
         infoScreen.gameObject.SetActive(true);
     }
 
+    public void ToOptions()
+    {
+        titleScreen.gameObject.SetActive(false);
+        optionsScreen.gameObject.SetActive(true);
+    }
+
+    public void ToggleGemSpin()
+    {
+        // Toggles the boolean for whether or not gems are spinning
+        GameManager.instance.gemsSpinning = !GameManager.instance.gemsSpinning;
+    }
+
+    public void ToggleDrawParticles()
+    {
+        // Toggles the boolean for whether or not sparkles occur while drawing
+        GameManager.instance.drawParticles = !GameManager.instance.drawParticles;
+    }
+
+    public void ToggleExplosions()
+    {
+        // Toggles the boolean for whether or not gems explode when collected
+        GameManager.instance.explosions = !GameManager.instance.explosions;
+    }
+
     public void ToMenu()
     {
         // Unload any remaining letters
@@ -63,6 +88,7 @@ public class MenuUIController : MonoBehaviour
         // Show menu, and hide non-menu UI elements
         titleScreen.gameObject.SetActive(true);
         infoScreen.gameObject.SetActive(false);
+        optionsScreen.gameObject.SetActive(false);
         orbsCollectedText.gameObject.SetActive(false);
         lettersCompleteText.gameObject.SetActive(false);
         quitCurrentGameButton.gameObject.SetActive(false);

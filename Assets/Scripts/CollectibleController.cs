@@ -39,7 +39,10 @@ public class CollectibleController : MonoBehaviour
         if (gameManager.isGameActive)
         {
             Destroy(gameObject);
-            Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
+            if (GameManager.instance.explosions)
+            {
+                Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
+            }
         }
     }
 

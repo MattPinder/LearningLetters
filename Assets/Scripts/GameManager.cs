@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+
     // Variables for letter spawning
     [Header("Letter Spawning")]
     public GameObject[] letterPrefabs;                          // Array of letter prefabs (defined in Unity Editor)
@@ -29,10 +31,26 @@ public class GameManager : MonoBehaviour
     // Other
     [Header("Other")]
     public MenuUIController menuUIController;       // Canvas's menu UI controller script
+    public bool gemsSpinning = true;                // Whether the gems spin or not
+    public bool drawParticles = true;               // Whether particles appear while drawing or not
+    public bool explosions = true;                  // Whether gems explode when collected or not
     private PlayerTrail player;                     // GameObject representing the player
     public bool isGameActive = false;               // Determine whether the game is active or not
     public string altGameMode = null;               // Any alternate game mode selected (Random/Upper/Lower/All)
     private float winScreenTime = 3.0f;             // Time to remain on the win screen after winning the game
+
+    // Singleton pattern
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
 
     // Start on menu screen, and find the Player object
     void Start()

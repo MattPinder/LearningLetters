@@ -74,10 +74,14 @@ public class PlayerTrail : MonoBehaviour
     }
 
     // Enable/disable Box Collider and Particle System
+    // Enable Particle System only if the user hasn't disabled it
     void UpdateComponents()
     {
         col.enabled = drawing;
-        particles.gameObject.SetActive(drawing);
+        if (GameManager.instance.drawParticles)
+        {
+            particles.gameObject.SetActive(drawing);
+        }
     }
 
     // Copied from Unity VR Tutorial
