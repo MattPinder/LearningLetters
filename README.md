@@ -6,8 +6,10 @@ As this app is still a prototype, constructive feedback is always appreciated!
 
 ## How to install
 
-1. Go to the `Builds` folder, click on the latest APK file (currently [`LearningLetters_Build10_20260723.apk`](Builds/LearningLetters_Build10_20260723.apk)),  then download it onto your mobile device by clicking the `...` icon and `Download`.
-* If you are using a device with Android version 7.0, download the `LearningLettersLegacy` APK file instead (currently [`LearningLettersLegacy_Build10_20260723.apk`](Builds/LearningLettersLegacy_Build10_20260723.apk)). Older versions of Android are not supported.
+1. Click the relevant link for your version of Android:
+* For Android 7.1 and above: [`LearningLetters_Build10_20260723.apk`](Builds/LearningLetters_Build10_20260723.apk)
+* For Android 7.0: [`LearningLettersLegacy_Build10_20260723.apk`](Builds/LearningLettersLegacy_Build10_20260723.apk)
+2. Download the file onto your device by clicking the `...` icon and `Download`.
 
 ![DownloadFile](https://raw.githubusercontent.com/MattPinder/LearningLetters/main/.github/images/DownloadFile.jpg)
 
