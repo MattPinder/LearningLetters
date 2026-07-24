@@ -20,3 +20,29 @@ As this app is still a prototype, constructive feedback is always appreciated!
 ## How to play
 
 Once the app is installed and opened, instructions can be accessed via the Instructions button.
+
+## Credits
+
+Learning Letters was created using Unity versions 6.0 and 6.3
+
+### Assets
+All assets used under the **Standard Unity Asset Store EULA - Extension Asset**
+
+[Simple Gems and Items Ultimate Animated Customizable Pack](https://assetstore.unity.com/packages/3d/props/simple-gems-and-items-ultimate-animated-customizable-pack-73764), by BenjaTheMaker
+
+[FREE Casual Game SFX Pack](https://assetstore.unity.com/packages/audio/sound-fx/free-casual-game-sfx-pack-54116), by Dustyroom
+
+[Magic Effects FREE](https://assetstore.unity.com/packages/vfx/particles/spells/magic-effects-free-247933), by Hovl Studio
+
+[Nature - Essentials](https://assetstore.unity.com/packages/audio/ambient/nature/nature-essentials-208227), by Nox_Sound
+
+[Grass Magic Forest Floor: 10 Textures (Hand-painted, Seamless + Tileable) #10](https://assetstore.unity.com/packages/2d/textures-materials/nature/grass-magic-forest-floor-10-textures-hand-painted-seamless-tilea-235673), by Texture Me!
+
+### Fonts
+
+SIL Open Font License, Version 1.1
+
+* LiberationSans (Unity default)
+* [Comic Neue](https://fonts.google.com/specimen/Comic+Neue)
+* [Delius](https://fonts.google.com/specimen/Delius)
+* [Mali](https://fonts.google.com/specimen/Mali?preview.script=Latn&query=mali&script=Latn)
