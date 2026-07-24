@@ -39,10 +39,9 @@ All assets used under the **Standard Unity Asset Store EULA - Extension Asset**
 [Grass Magic Forest Floor: 10 Textures (Hand-painted, Seamless + Tileable) #10](https://assetstore.unity.com/packages/2d/textures-materials/nature/grass-magic-forest-floor-10-textures-hand-painted-seamless-tilea-235673), by Texture Me!
 
 ### Fonts
+Fonts used under the SIL Open Font License, Version 1.1
 
-SIL Open Font License, Version 1.1
-
-* LiberationSans (Unity default)
+* [LiberationSans](https://fonts.adobe.com/fonts/liberation-sans) (Unity default)
 * [Comic Neue](https://fonts.google.com/specimen/Comic+Neue)
 * [Delius](https://fonts.google.com/specimen/Delius)
 * [Mali](https://fonts.google.com/specimen/Mali?preview.script=Latn&query=mali&script=Latn)
